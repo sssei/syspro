@@ -1,2 +1,5 @@
 #!/bin/sh
-find coreutils -1 -name \*.c | wc 
+find coreutils -name \*.c -exec wc -l {} + | sort -n | awk '{print $2}' > result.txt
+
+
+
