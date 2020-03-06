@@ -5,8 +5,10 @@ myname='myname'
 my_address='my_address'
 for file in *.cpp
 do
-    # sed -i 's/_${user}/${address}_${myname}/${my_address}_/g' $file
-    sed -i 's/\s*$//' $file
+    sed -i 's/myname/NEET/' $file
+    sed -i 's/$user/$myname/'  $file
+    sed -i 's/${address}/${my_address}/' $file
+    # sed -i 's/\s*$//' $file
     # mv $file ${file%.*}.cc
 done     
 	   
