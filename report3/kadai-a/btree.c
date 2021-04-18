@@ -1,3 +1,4 @@
+#define _REENTRANT
 #include "btree.h"
 #include <stdlib.h>
 #include <stdio.h>
