@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include "c.h"
-
-int function_C(int c){
-  return c + 1;
+char *hello_c(void)
+{
+	char *r = "Hello, C world!\n";
+	return r;
 }

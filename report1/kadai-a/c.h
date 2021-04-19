@@ -1,3 +1,6 @@
-#define C "This is C"
+#ifndef C_H_INCLUDED
+#define C_H_INCLUDED
 
-int function_C(int);
+char *hello_c(void);
+
+#endif

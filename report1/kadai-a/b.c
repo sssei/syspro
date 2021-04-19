@@ -1,6 +1,7 @@
-#include <stdio.h>
-#include "b.h"
-
-int function_B(int b){
-  return b + 2;
+int mystrcmp(const char *a, const char *b)
+{
+	while (*a != '\0' && *a == *b) {
+		++a; ++b;
+	}
+	return *a - *b;
 }

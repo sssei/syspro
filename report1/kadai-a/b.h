@@ -1,3 +1,6 @@
-#define B "This is B"
+#ifndef B_H_INCLUDED
+#define B_H_INCLUDED
 
-int function_B(int b);
+int mystrcmp(const char *, const char *);
+
+#endif

@@ -1,9 +1,14 @@
 #include <stdio.h>
-#include "b.h"
 #include "c.h"
+#include "b.h"
 
-int main(){
-  int a = function_C(1) + function_B(2);
-  printf("%d\n", a);
-  return 0;
+const char *a = "Hello, C++ world!\n";
+
+int main(void)
+{
+	const char *s = hello_c();
+	if (mystrcmp(s, a) < 0)
+	    printf("%s", s);
+	else
+	    printf("%s",a);
 }

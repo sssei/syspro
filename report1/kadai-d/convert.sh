@@ -10,6 +10,6 @@ do
     sed -i "s/$user/$myname/" $file
     sed -i "s/$address/$myaddress/" $file
     sed -i 's/\s*$//' $file
-    mv $file ${file%.*}.c
+    mv $file ${file%.*}.cc
 done     
 	   
