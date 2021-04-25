@@ -1,0 +1,5 @@
+If you execute this program, the result would be as follows.
+$ make
+$ ./test | wc -l
+10000
+You can confirm that 10000 lines were output. 
