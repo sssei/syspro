@@ -4,8 +4,22 @@
 #include <fcntl.h> //open
 #include <stdio.h> //perror
 #include <stdlib.h> // exit
+#include <sys/stat.h> //stat
 
 #define BUF_SIZE 512
+
+int str_cmp(const char* s1, const char* s2){
+    int i = 0;
+    while(1){
+	if(s1[i] != s2[i]){
+	    return 1;
+	}
+	if(s1[i] == '\0'){
+	    return 0;
+	}
+	i++;
+    }
+}
 
 int file_open(const char *pathname, int flags){
   int fd;
@@ -63,13 +77,31 @@ void mycopy(const char *source, const char *target){
   return;
 }
 
+void permission(const char *source, const char *target){
+    struct stat stat_buf ;
+    if(stat(source, &stat_buf) == 0){
+	if(chmod(target, stat_buf.st_mode & 0777) != 0){
+	    perror("chmod: error");
+	    exit(1);
+	}
+    }else{
+	perror("stat: error");
+	exit(1);
+    }
+}
+
 int main(int argc, char *argv[]){
   if(argc != 3){
     write(2, "operand error\n", 14);
     exit(1);
   }
-  
+
+  if(str_cmp(argv[1], argv[2]) == 0){
+      write(2, "cp: the same file\n", 18);
+      exit(1);
+  }
   mycopy(argv[1], argv[2]);
+  permission(argv[1], argv[2]);
   
   return 0;
 }
