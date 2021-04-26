@@ -21,7 +21,7 @@ void *thread_put(void *arg){
   
 int main(){
   int i,j;
-  pthread_t thread[20];
+  pthread_t thread[50];
 
   /* Test for checking if all the item can be got in the same order as put */
   for(i = 0; i < 10; i++){
@@ -32,16 +32,22 @@ int main(){
   }
 
   /* Insert and get parallelly */
-  for(i = 0; i < 5000; i++){
-    for(j = 0; j < 20; j++){
+  for(i = 0; i < 400; i++){
+    for(j = 0; j < 25; j++){
       if(pthread_create(&thread[j], NULL, thread_put, &i) != 0){
 	printf("error: pthread_create\n");
 	return 1;
       }
     }
-    for(j = 0; j < 20; j++){
+    for(j = 25; j < 50; j++){
       if(pthread_create(&thread[j], NULL, thread_get, NULL) != 0){
 	printf("error: pthread_create\n");
+	return 1;
+      }
+    }
+    for(j = 0; j < 50; j++){
+      if(pthread_join(thread[j], NULL) != 0){
+	printf("error: pthread_join\n");
 	return 1;
       }
     }
