@@ -6,7 +6,7 @@ int main(){
   int i;
   struct timespec start, end;
   clock_gettime(CLOCK_REALTIME, &start);
-  getpid();
+  write(1, "", 0);
   clock_gettime(CLOCK_REALTIME, &end);  
 
   long long elapsed_sec = 1000 * 1000 * 1000 * (end.tv_sec - start.tv_sec);
@@ -15,7 +15,7 @@ int main(){
   printf(" one time  : %.9lf sec\n", elapsed_time);
 
   clock_gettime(CLOCK_REALTIME, &start);
-  for(i = 0; i < 1000; i++) getpid(); 
+  for(i = 0; i < 1000; i++) write(1, "", 0); 
   clock_gettime(CLOCK_REALTIME, &end);  
 
   elapsed_sec = 1000 * 1000 * 1000 * (end.tv_sec - start.tv_sec);
