@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/typed.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <string.h>
+#include <sys/types.h>
 #include <sys/socket.h> // socket, bind
 #include <netinet/in.h> //sockaddr_in 
 #include <arpa/inet.h> // htons
@@ -17,8 +20,8 @@ int main(int argc, char * argv[]){
     struct hostent *hp;
     
     if(argc != 3){
-	write(2, "operand error\n", 14);
-	return 1;
+      fwrite("operand error\n", 1, 14, stderr);
+      return 1;
     }
 
     hostname = argv[1];    
@@ -29,7 +32,7 @@ int main(int argc, char * argv[]){
 	handle_error("gethostbyname");
     }
     
-    if((sockfd = socket(AF_INET, SOCK_DGRAM, IPPRTO_UDP)) == -1){
+    if((sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1){
 	handle_error("socket");
     }
 
@@ -41,7 +44,15 @@ int main(int argc, char * argv[]){
 
     int len, n;
 
+    fread(buffer, 1, sizeof(buffer), stdin);
+    printf("%ld %ld\n", sizeof(buffer), strlen(buffer));
+    sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
     
+    n = recvfrom(sockfd, buffer, MAXLINE, 0, (struct sockaddr *)&servaddr, (socklen_t *) &len);
+    buffer[n] = '\0';
+
+    close(sockfd);
+    return 0;
 
 
     

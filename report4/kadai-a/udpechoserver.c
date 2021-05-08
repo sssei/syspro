@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h> // socket, bind
 #include <netinet/in.h> //sockaddr_in 
@@ -15,14 +16,14 @@ int main(int argc, char * argv[]){
     struct sockaddr_in servaddr, cliaddr;
     
     if(argc != 2){
-	write(2, "operand error\n", 14);
-	return 1;
+      fwrite("operand error\n", 1, 14, stderr);
+      return 1;
     }
 
     port = atoi(argv[1]);
     
     // Creating socket file descriptor 
-    if((sockfd = socket(AF_INET, SOCK_DGRAM, IPPRTO_UDP)) == -1){
+    if((sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1){
 	handle_error("socket");
     }
 
@@ -35,19 +36,22 @@ int main(int argc, char * argv[]){
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
     // Bind the socket with the server address 
-    if(bind(sockfd, &servaddr, sizeof(servaddr)) == -1){
+    if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) == -1){
 	handle_error("bind");
     }
 
     int len, n;
     len = sizeof(cliaddr);
-    
-    n = recvfrom(sockfd, buffer, MAXLINE, 0, &cliaddr, &len);
-    buffer[n] = '\0';
-    fwrite(buffer, sizeof(char), n, stdout);
-    fwrite("\n", sizeof(char), 1, stdout);
-    sendto(sockfd, buffer, n, 0, &cliaddr, len);
 
+    while(1){
+      n = recvfrom(sockfd, buffer, MAXLINE, 0, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
+      printf("%d\n", n);
+      buffer[n] = '\0';
+      fwrite(buffer, sizeof(char), n, stdout);
+      fwrite("\n", sizeof(char), 1, stdout);
+      sendto(sockfd, buffer, n, 0, (const struct sockaddr *)&cliaddr, len);
+    }
+    
     return 0;
     
 }
