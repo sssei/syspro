@@ -45,7 +45,6 @@ int main(int argc, char * argv[]){
 
     while(1){
       n = recvfrom(sockfd, buffer, MAXLINE, 0, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
-      printf("%d\n", n);
       buffer[n] = '\0';
       fwrite(buffer, sizeof(char), n, stdout);
       fwrite("\n", sizeof(char), 1, stdout);

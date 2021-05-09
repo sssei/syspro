@@ -46,6 +46,7 @@ int main(int argc, char * argv[]){
 
     fread(buffer, 1, sizeof(buffer), stdin);
     printf("%ld %ld\n", sizeof(buffer), strlen(buffer));
+    
     sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
     
     n = recvfrom(sockfd, buffer, MAXLINE, 0, (struct sockaddr *)&servaddr, (socklen_t *) &len);
