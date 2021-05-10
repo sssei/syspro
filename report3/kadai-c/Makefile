@@ -2,7 +2,7 @@ CC = gcc
 LD = gcc
 CFLAGS = -Wall -pthread -g 
 LDFLAGS = -pthread
-TARGET = test
+TARGET = bb
 SRCS := $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.dep)

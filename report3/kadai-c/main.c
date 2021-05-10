@@ -1,3 +1,6 @@
+#ifndef _REENTRANT
+#define _REENTRANT
+#endif
 #include "bb.h"
 #include <pthread.h>
 #include <stdio.h>

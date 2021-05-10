@@ -8,8 +8,9 @@ size_t str_len(const char* str){
 
 void str_join(char* str1, const char* str2){
   int i;
+  int str1_len = str_len(str1);
   for(i = 0; i <= str_len(str2); i++){
-    str1[str_len(str1) + i] = str2[i];
+    str1[str1_len + i] = str2[i];
   }
 
   return;

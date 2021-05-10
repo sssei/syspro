@@ -1,3 +1,6 @@
+#ifndef _REENTRANT
+#define _REENTRANT
+#endif
 #include "bb.h"
 #define BUFF_SIZE 11
 

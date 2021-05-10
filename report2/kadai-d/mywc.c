@@ -60,7 +60,7 @@ int count_word(const char *buf, int buf_size){
 void print_result(int line_cnt, int word_cnt, int byte_cnt, const char *source){
   char buf[str_len(source) + 50];
   int ptr = 0;
-  ptr += int2char(buf, line_cnt);
+  ptr += int2char(buf + ptr, line_cnt);
   buf[ptr] = ' ';
   ptr++;
   ptr += int2char(buf + ptr, word_cnt);
@@ -70,7 +70,7 @@ void print_result(int line_cnt, int word_cnt, int byte_cnt, const char *source){
   buf[ptr] = ' ';
   ptr++;
   str_join(buf + ptr, source);
-  ptr += str_len(source) + 1;
+  ptr += str_len(source);
   str_join(buf + ptr, "\n");
   ptr++;
   write(1, buf, ptr);
