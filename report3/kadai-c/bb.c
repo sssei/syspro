@@ -1,5 +1,5 @@
 #include "bb.h"
-#define BUFF_SIZE 10
+#define BUFF_SIZE 11
 
 int bb_buf[BUFF_SIZE];
 int buf_in = 0;
@@ -19,7 +19,7 @@ int bb_get(void){
 
 void bb_put(int i){
   pthread_mutex_lock(&mutex);
-  while(buf_in == (buf_out + 1) % BUFF_SIZE){
+  while(buf_out == (buf_in + 1) % BUFF_SIZE){
     pthread_cond_wait(&cond_out, &mutex);
   }
   bb_buf[buf_in] = i;
