@@ -38,19 +38,23 @@ int main(int argc, char const *argv[]){
     if (listen(server_fd, 3) < 0){
       handle_error("listen");
     }
+
+    while(1){
+      if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
+			       (socklen_t*)&addrlen))<0)
+	{
+	  handle_error("accept");
+	}
+      
+      bzero(buffer, MAXLINE);
+      if(read( new_socket , buffer, MAXLINE) < 0){
+	handle_error("read");
+      };
     
-    if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
-			     (socklen_t*)&addrlen))<0)
-    {
-      handle_error("accept");
+      printf("%s\n",buffer );
+      send(new_socket , buffer , strlen(buffer), 0 );
+      printf("Message sent\n");
     }
-    
-    if(read( new_socket , buffer, MAXLINE) < 0){
-      handle_error("read");
-    };
-    
-    printf("%s\n",buffer );
-    send(new_socket , buffer , strlen(buffer) , 0 );
-    printf("Message sent\n");
+
     return 0;
 }
