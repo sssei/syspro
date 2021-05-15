@@ -12,45 +12,46 @@
     do {perror(msg); exit(EXIT_FAILURE);} while (0)
 
 int main(int argc, char *argv[]){
-    int server_fd, port;
-    struct sockaddr_in address;
-    struct hostent *hp;
-    char* hostname;
-    char buffer[MAXLINE];
+  int server_fd, port, valsize;
+  struct sockaddr_in address;
+  struct hostent *hp;
+  char* hostname;
+  char buffer[MAXLINE];
 
-    if(argc != 3){
-      fwrite("operand error\n", 1, 14, stderr);
-      return 1;
-    }
+  if(argc != 3){
+    fwrite("operand error\n", 1, 14, stderr);
+    return 1;
+  }
     
-    hostname = argv[1];    
-    port = atoi(argv[2]);
+  hostname = argv[1];    
+  port = atoi(argv[2]);
 
-    hp = gethostbyname(hostname);
-    if(hp == NULL){
-	handle_error("gethostbyname");
-    }
+  hp = gethostbyname(hostname);
+  if(hp == NULL){
+    handle_error("gethostbyname");
+  }
     
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1){
-      handle_error("socket");
-    }
+  if ((server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1){
+    handle_error("socket");
+  }
 
-    address.sin_family = AF_INET;
-    address.sin_port = htons(port);
-    address.sin_addr.s_addr = *((unsigned long *) hp->h_addr);       
+  address.sin_family = AF_INET;
+  address.sin_port = htons(port);
+  address.sin_addr.s_addr = *((unsigned long *) hp->h_addr);       
 
-    if (connect(server_fd, (struct sockaddr *)&address,
-		sizeof(address))<0)
+  if (connect(server_fd, (struct sockaddr *)&address,
+	      sizeof(address))<0)
     {
       handle_error("connect");
     }
 
-    fread(buffer, 1, sizeof(buffer), stdin);
+  fread(buffer, 1, sizeof(buffer), stdin);
     
-    send(server_fd, buffer, strlen(buffer) , 0 );
-    read(server_fd, buffer, MAXLINE);
+  send(server_fd, buffer, strlen(buffer) , 0 );
+  valsize = read(server_fd, buffer, MAXLINE);
+  buffer[valsize] = '\0';
 
-    fwrite(buffer, sizeof(char), strlen(buffer), stdout);
+  fwrite(buffer, sizeof(char), strlen(buffer), stdout);
 
-    return 0;
+  return 0;
 }
