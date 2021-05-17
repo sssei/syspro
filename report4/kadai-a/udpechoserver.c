@@ -6,13 +6,14 @@
 #include <netinet/in.h> //sockaddr_in 
 #include <arpa/inet.h> // htons
 
-#define MAXLINE 1024
+#define MAXLINE 100000000
 #define handle_error(msg) \
     do {perror(msg); exit(EXIT_FAILURE);} while (0)
 
+char buffer[MAXLINE];
+
 int main(int argc, char * argv[]){
     int sockfd, port;
-    char buffer[MAXLINE];
     struct sockaddr_in servaddr, cliaddr;
     
     if(argc != 2){
@@ -47,7 +48,6 @@ int main(int argc, char * argv[]){
       n = recvfrom(sockfd, buffer, MAXLINE, 0, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
       buffer[n] = '\0';
       fwrite(buffer, sizeof(char), n, stdout);
-      fwrite("\n", sizeof(char), 1, stdout);
       sendto(sockfd, buffer, n, 0, (const struct sockaddr *)&cliaddr, len);
     }
     

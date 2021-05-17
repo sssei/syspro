@@ -7,16 +7,17 @@
 #include <arpa/inet.h> //htons 
 #include <string.h>
 
-#define MAXLINE 1024
+#define MAXLINE 1000000000
 #define handle_error(msg) \
     do {perror(msg); exit(EXIT_FAILURE);} while (0)
+
+char buffer[MAXLINE];
 
 int main(int argc, char *argv[]){
   int server_fd, port, valsize;
   struct sockaddr_in address;
   struct hostent *hp;
   char* hostname;
-  char buffer[MAXLINE];
 
   if(argc != 3){
     fwrite("operand error\n", 1, 14, stderr);
@@ -45,7 +46,8 @@ int main(int argc, char *argv[]){
       handle_error("connect");
     }
 
-  fread(buffer, 1, sizeof(buffer), stdin);
+  valsize = fread(buffer, 1, sizeof(buffer), stdin);
+  buffer[valsize] = '\0';
     
   send(server_fd, buffer, strlen(buffer) , 0 );
   valsize = read(server_fd, buffer, MAXLINE);

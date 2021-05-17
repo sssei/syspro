@@ -20,10 +20,26 @@ struct thread_args{
   struct sockaddr_in address;
 };
 
+char buffer[MAXLINE];
+
+void send_data(int fd, const char* buffer, size_t buf_size){
+    const char* ptr = buffer;
+    const char* const endp = buffer + buf_size;
+
+    while(ptr < endp){
+	ssize_t send_size = send(fd, buffer, buf_size, 0);
+	if(send_size < 0){
+	    handle_error("send");
+	}
+	ptr += send_size;
+    }
+    return;
+}
+
 void *server(void *arg){
-  char buffer[MAXLINE];
   struct thread_args *targs = (struct thread_args *)arg;
-  struct sockaddr_in address = targs->address;  
+  struct sockaddr_in address = targs->address;
+  ssize_t read_size;
   int server_fd = targs->server_fd;
   int new_socket;
   int addrlen = sizeof(address);  
@@ -34,13 +50,18 @@ void *server(void *arg){
       {
 	handle_error("accept");
       }
-      
+
     bzero(buffer, MAXLINE);
-    if(read( new_socket , buffer, MAXLINE) < 0){
-      handle_error("read");
-    };
-    
-    send(new_socket , buffer , strlen(buffer), 0 );
+    while(1){
+	read_size = read( new_socket , buffer, MAXLINE);
+	if(read_size > 0){
+	    send_data(new_socket, buffer, read_size);
+	}else if(read_size == 0){
+	    break;
+	}else{
+	    handle_error("read");
+	}
+    }
   }
 
   return NULL;

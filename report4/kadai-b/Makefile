@@ -2,8 +2,7 @@ CC = gcc
 LD = gcc
 CFLAGS = -Wall -pthread
 LDFLAGS = -pthread
-SERVER1 = tcpechoserver
-TARGET = 
+TARGET = tcpechoserver1 tcpechoserver2 tcpechoclient
 SRCS := $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.dep)
@@ -18,4 +17,4 @@ RM = rm -f
 -include $(DEPS)
 
 clean:
-	$(RM) $(DEPS) $(OBJS) 
+	$(RM) $(DEPS) $(OBJS) $(TARGET)

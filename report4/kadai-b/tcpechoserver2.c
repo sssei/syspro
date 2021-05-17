@@ -12,8 +12,9 @@
 #define handle_error(msg) \
     do {perror(msg); exit(EXIT_FAILURE);} while (0)
 
+char buffer[MAXLINE];
+
 int main(int argc, char const *argv[]){
-  char buffer[MAXLINE];  
   int server_fd, port, i, nfds, valsize;
   int epoll_fd, new_socket;
   struct sockaddr_in address;

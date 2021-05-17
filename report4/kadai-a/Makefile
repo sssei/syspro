@@ -21,4 +21,4 @@ $(CLIENT): $(CLIENT).o
 -include $(DEPS)
 
 clean:
-	$(RM) $(TARGET) $(DEPS) $(OBJS)
+	$(RM) $(SERVER) $(CLIENT) $(DEPS) $(OBJS)
