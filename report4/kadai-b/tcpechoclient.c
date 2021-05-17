@@ -7,7 +7,7 @@
 #include <arpa/inet.h> //htons 
 #include <string.h>
 
-#define MAXLINE 1000000000
+#define MAXLINE 1024
 #define handle_error(msg) \
     do {perror(msg); exit(EXIT_FAILURE);} while (0)
 
@@ -46,14 +46,28 @@ int main(int argc, char *argv[]){
       handle_error("connect");
     }
 
-  valsize = fread(buffer, 1, sizeof(buffer), stdin);
-  buffer[valsize] = '\0';
-    
-  send(server_fd, buffer, strlen(buffer) , 0 );
-  valsize = read(server_fd, buffer, MAXLINE);
-  buffer[valsize] = '\0';
+  while(1){
+    valsize = fread(buffer, 1, sizeof(buffer), stdin);
+    if(valsize > 0){
+      send(server_fd, buffer, valsize , 0 );
+    }else if(valsize == 0){
+      break;
+    }else{
+      handle_error("fread");
+    }
+  }
 
-  fwrite(buffer, sizeof(char), strlen(buffer), stdout);
+  while(1){
+    valsize = read(server_fd, buffer, MAXLINE);
+    if(valsize > 0){
+      fwrite(buffer, sizeof(char), valsize, stdout);
+      if(valsize != MAXLINE) break;
+    }else if(valsize == 0){
+      break;      
+    }else{
+      handle_error("fwrite");
+    }
+  }
 
   return 0;
 }
