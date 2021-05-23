@@ -12,11 +12,10 @@
 #define handle_error(msg) \
     do {perror(msg); exit(EXIT_FAILURE);} while (0)
 
-char buffer[MAXLINE];
-
 int main(int argc, char const *argv[]){
   int server_fd, port, i, nfds, valsize;
   int epoll_fd, new_socket;
+  char buffer[MAXLINE];  
   struct sockaddr_in address;
   int addrlen = sizeof(address);
   struct epoll_event ev, events[MAX_EVENTS];  
