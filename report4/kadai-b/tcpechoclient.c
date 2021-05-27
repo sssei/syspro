@@ -11,10 +11,9 @@
 #define handle_error(msg) \
     do {perror(msg); exit(EXIT_FAILURE);} while (0)
 
-char buffer[MAXLINE];
-
 int main(int argc, char *argv[]){
-  int server_fd, port, valsize;
+  int server_fd, port, valsize, ret;
+  char buffer[MAXLINE];  
   struct sockaddr_in address;
   struct hostent *hp;
   char* hostname;
@@ -47,7 +46,7 @@ int main(int argc, char *argv[]){
     }
 
   while(1){
-    valsize = fread(buffer, 1, sizeof(buffer), stdin);
+    valsize = read(0, buffer, MAXLINE);
     if(valsize > 0){
       send(server_fd, buffer, valsize , 0 );
     }else if(valsize == 0){
